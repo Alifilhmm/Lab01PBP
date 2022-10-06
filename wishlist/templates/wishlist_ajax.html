@@ -1,7 +1,4 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<!-- CSS only -->
+{% extends 'base.html' %} {% block content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 <nav class="navbar navbar-expand-lg bg-secondary">
   <div class="container-fluid">
@@ -28,78 +25,74 @@
   </div>
 </nav>
 
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    $(document).ready(function () {
-      $.get("{% url 'wishlist:show_json' %}", function (data) {
-        $.each(data, function (index, value) {
-          $("#tableshow").append("<tr><td>" + value.fields.nama_barang + "</td><td>" + value.fields.harga_barang + "</td><td>" +value.fields.deskripsi + "</td></tr>");
-        });
-      });
-  
-      $("#form-wishlist").submit(function (e) {
-        e.preventDefault();
-        var nama_barang = $("#nama_barang").val();
-        var harga_barang = parseInt($("#harga_barang").val());
-        var deskripsi = $("#deskripsi").val();
-        $.ajax({
-          type: "POST",
-          url: "{% url 'wishlist:new_wishlist_item' %}",
-          data: {
-            nama_barang: nama_barang,
-            harga_barang: harga_barang,
-            deskripsi: deskripsi,
-          },
-
-          success: function (response) {
-            $("#tableshow").append("<tr><td>" + nama_barang + "</td><td>" + harga_barang + "</td><td>" + deskripsi + "</td></tr>");
-          },
-
-          error: function (error) {
-            console.log(error);
-          },
-
-        });
-      });
-    });
-</script>
-
-<div class="card-body">
-    <h1>Add New Item to Wishlist</h1>
-    <form method="post" id="form_wishlist">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="nama_barang" class="form-label">Nama Barang</label>
-            <input type="text" class ="form-control" name="name_barang" id="nama_barang" placeholder="Input Nama Barang"></input>
-        </div>
-        <div class="mb-3">
-            <label for="harga_barang" class="form-label">Harga Barang</label>
-            <input type="text" class ="form-control" name="harga_barang" id="harga_barang" placeholder="Input Harga Barang"></input>
-        </div>
-        <div class="mb-3">
-            <label for="deskripsi" class="form-label">Deskripsi Barang</label>
-            <input type="text" class ="form-control" name="deskripsi" id="deskripsi" placeholder="Input Deskripsi Barang"></input>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
-    </form>
-</div>
-<div class="m-5 d-flex flex-column justify-content-center align-items-center">
+<div class="m-5 d-flex flex-column justify-content-center align-items-center"></div>
   <h5>Nama: </h5>
   <p></p><b>{{nama}}</b></p>
 
-  <br>
-  <table class="table table-bordered table-hover" id="tableshow">
-    <tr class="table-secondary">
+    <table class="table table-bordered" id="showtable">
+      <tr class="table-secondary">
         <th>Nama Barang</th>
         <th>Harga Barang</th>
         <th>Deskripsi</th>
     </tr>
-  </table>
+    </table>
 
-  <h5>Sesi terakhir login: {{ last_login }}</h5>
+    </button>
+  </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function () {
+    $.get("{% url 'wishlist:show_json' %}", function (data) {
+      $.each(data, function (index, value) {
+        $("#showtable").append("<tr><td>" + value.fields.nama_barang + "</td><td>" + value.fields.harga_barang + "</td><td>" + value.fields.deskripsi + "</td></tr>"
+        );
+      });
+    });
+
+    $("#form4wishlist").submit(function (e) {
+      e.preventDefault();
+      var nama_barang = $("#nama_barang").val();
+      var harga_barang = parseInt($("#harga_barang").val());
+      var deskripsi = $("#deskripsi").val();
+      $.ajax({
+        type: "POST",
+        url: "{% url 'wishlist:new_wishlist_item' %}",
+        data: {
+          nama_barang: nama_barang,
+          harga_barang: harga_barang,
+          deskripsi: deskripsi,
+        },
+        success: function (response) {
+          $("#showtable").append("<tr><td>" + nama_barang + "</td><td>" + harga_barang + "</td><td>" + deskripsi + "</td></tr>");
+        },
+        error: function (error) {
+          console.log(error);
+        },
+      });
+    });
+  });
+</script>
+
+<div class="card-body">
+    <h3>Add Wishlist</h3>
+    <form method="post" id="form4wishlist">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="nama_barang" class="form-label">Nama Barang</label>
+        <input type="text" class ="form-control" name="name_barang" id="nama_barang" placeholder="Input Nama Barang"></input>
+      </div>
+      <div class="form-group">
+        <label for="harga_barang" class="form-label">Harga Barang</label>
+        <input type="text" class ="form-control" name="harga_barang" id="harga_barang" placeholder="Input Harga Barang"></input>
+      </div>
+      <div class="form-group">
+        <label for="deskripsi" class="form-label">Deskripsi</label>
+        <input type="text" class ="form-control" name="deskripsi" id="deskripsi" placeholder="Input Deskripsi Barang"></input>
+      </div>
+      <button type="submit" class="btn btn-secondary">Submit</button>
+    </form>
+</div>
 
 {% endblock content %}
